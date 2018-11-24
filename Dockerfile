@@ -16,22 +16,22 @@ RUN apt update \
     && apt-get -y install git gcc \
     && apt-get upgrade -y \
     && rm -r /var/lib/apt/lists /var/cache/apt \
-    && go build -o ./bin/order-cli
+    && go build -o ./bin/order-cli 
 
 FROM ubuntu:latest
 LABEL maintainer "urothis@gmail.com"
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get clean
 # copy nwnsc 
 COPY --from=nwnsc /usr/local/bin/nwnsc /usr/local/bin/
 COPY --from=nwnsc /nwn .
-COPY --from=go /order-cli/bin /order-cli/
 ENV NWN_INSTALLDIR=/nwn/data
-
+# copy go
+COPY --from=go /order-cli/bin /usr/local/bin/
 # copy nim image
 COPY --from=nim /usr/local/bin/* /usr/local/bin/
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get clean \
+    && chmod +x ./usr/local/bin/order-cli
 
 # run order-cli
-ENTRYPOINT ./order-cli
-WORKDIR /order-cli
+ENTRYPOINT [ "order-cli" ]
