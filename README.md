@@ -1,5 +1,5 @@
 # nwn-order-cli
-[![](https://images.microbadger.com/badges/image/urothis/nwn-order.svg)](https://microbadger.com/images/urothis/nwn-order "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/urothis/nwn-order-cli.svg)](https://microbadger.com/images/urothis/nwn-order-cli "Get your own image badge on microbadger.com")
 
 ## Usage:
   order-cli [command]
