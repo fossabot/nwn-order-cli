@@ -8,15 +8,16 @@ RUN apt-get update \
     && nimble build -d:release \
     && mv bin/* /usr/local/bin/
 
-FROM golang:1.11.0 as go
-ADD . /order-cli
-WORKDIR /order-cli
+FROM golang:1.11.0 as nwn-order-cli-builder
 RUN apt update \
-    && go mod download\
-    && apt-get -y install git gcc \
-    && apt-get upgrade -y \
+    && apt upgrade -y \
     && rm -r /var/lib/apt/lists /var/cache/apt \
-    && go build -o ./bin/order-cli 
+    && git clone https://github.com/Urothis/nwn-order-cli.git \
+    && ls \ 
+    && cd nwn-order-cli \
+    && go mod download \
+    && go build -o ./bin/order-cli \
+    && mv bin/* /usr/local/bin/
 
 FROM ubuntu:latest
 LABEL maintainer "urothis@gmail.com"
@@ -25,7 +26,8 @@ COPY --from=nwnsc /usr/local/bin/nwnsc /usr/local/bin/
 COPY --from=nwnsc /nwn .
 ENV NWN_INSTALLDIR=/nwn/data
 # copy go
-COPY --from=go /order-cli/bin /usr/local/bin/
+COPY --from=nwn-order-cli-builder /usr/local/bin/ /usr/local/bin/
+RUN ls -a
 # copy nim image
 COPY --from=nim /usr/local/bin/* /usr/local/bin/
 RUN apt-get update \
