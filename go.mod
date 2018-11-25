@@ -1,4 +1,4 @@
-module ordercli
+module github.com/urothis/nwn-order-cli
 
 require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
